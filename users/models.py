@@ -9,3 +9,7 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=50)
     birthdate = models.DateField(blank=False)
     is_employee = models.BooleanField(blank=False, default=False)
+
+    movies = models.ForeignKey(
+        "movies.Movie", on_delete=models.CASCADE, related_name="movies", null=True
+    )
