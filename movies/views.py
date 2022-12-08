@@ -4,17 +4,28 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 from .models import Movie
 from django.shortcuts import get_object_or_404
 from .serializers import MovieSerializer
+from users.permissions import IsAdminOrReadOnly
 
 
 class MovieView(APIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAdminOrReadOnly]
 
     def get(self, request: Request) -> Response:
-        return Response({"msg": "Olá GET movies"})
+        movies = Movie.objects.all()
+
+        seriliazer = MovieSerializer(movies, many=True)
+
+        return Response(seriliazer.data, status.HTTP_200_OK)
 
     def post(self, request: Request) -> Response:
-        return Response({"msg": "Olá POST movies"}, status.HTTP_201_CREATED)
+
+        serializer = MovieSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        serializer.save(owner=request.user)
+
+        return Response(serializer.data, status.HTTP_201_CREATED)
 
 
 class MovieDetailView(APIView):
