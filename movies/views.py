@@ -23,12 +23,16 @@ class MovieView(APIView):
         serializer = MovieSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        serializer.save(owner=request.user)
+        serializer.save(user=request.user)
 
         return Response(serializer.data, status.HTTP_201_CREATED)
 
 
 class MovieDetailView(APIView):
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAdminOrReadOnly]
+
     def get(self, request: Request, movie_id: int) -> Response:
         try:
             movie = Movie.objects.get(id=movie_id)

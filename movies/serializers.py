@@ -12,7 +12,7 @@ class MovieSerializer(serializers.Serializer):
     added_by = serializers.SerializerMethodField()
 
     def get_added_by(self, obj):
-        return obj.owner.email
+        return obj.user.email
 
     def create(self, validated_data):
         return Movie.objects.create(**validated_data)

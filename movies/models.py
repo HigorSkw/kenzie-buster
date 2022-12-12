@@ -20,7 +20,7 @@ class Movie(models.Model):
     )
     synopsis = models.TextField(blank=True, null=True)
 
-    owner = models.ForeignKey(
+    user = models.ForeignKey(
         "users.User",
         on_delete=models.CASCADE,
         related_name="movies",
