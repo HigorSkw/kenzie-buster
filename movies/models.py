@@ -50,7 +50,7 @@ class MovieOrder(models.Model):
         related_name="user_movie_orders",
     )
 
-    buyed_at = models.DateField(auto_now_add=True)
+    buyed_at = models.DateTimeField(auto_now_add=True)
     price = models.DecimalField(max_digits=8, decimal_places=2)
 
     def __repr__(self) -> str:
